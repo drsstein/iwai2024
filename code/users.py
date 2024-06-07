@@ -40,7 +40,7 @@ class UserModel():
     """
     f0 = user_state[:,0][:,None, None]
     f1 = f0
-    target = user_state[:,-1][:,None, None]
+    target = user_state[:,-1].astype(int)[:,None, None] # cast to integer
     
     is_equal = np.isclose(target, app_action) # (particle x plan x timestep)
     is_lower = target < app_action
