@@ -17,8 +17,8 @@ def plot_interaction_sequence(oo_user, oo_system, user_target, ax=None):
   t = np.arange(len(oo_user))
   i_down = t[np.isclose(oo_user, 0)]
   i_up = t[np.isclose(oo_user, 1)]
-  ax.scatter(i_down+0.5, oo_system[i_down], c='red', marker=CARETDOWN, s=8**2, label='user feedback')
-  ax.scatter(i_up+0.5, oo_system[i_up], c='red', s=8**2, marker=CARETUP)
+  ax.scatter(i_down+0.5, oo_system[i_down], c='red', marker=CARETDOWN, s=6**2, label='user feedback')
+  ax.scatter(i_up+0.5, oo_system[i_up], c='red', s=6**2, marker=CARETUP)
     
   # plot user target
   ax.plot([0, num_steps], [user_target]*2, 'r--', label=f'user target ({user_target})')
@@ -39,7 +39,7 @@ def plot_target_belief_distribution_sequence(beliefs, user_target, cscale='linea
     ax.plot([0, num_steps], [user_target+0.5]*2, 'r--', label=f'user target ({user_target})')
     ax.set_xlabel('interface step')
     ax.set_ylabel('possible target')
-    ax.set_title('Marginal belief over target probabilities Q( target ).');
+    ax.set_title('Marginal Q( target ).');
     ax.legend()
 
 def plot_f_belief_distribution_sequence(beliefs, user_f, bins, cscale='linear', ax=None):
@@ -50,8 +50,11 @@ def plot_f_belief_distribution_sequence(beliefs, user_f, bins, cscale='linear', 
     img = np.log(np.asarray(beliefs)).T if cscale=='log' else np.asarray(beliefs).T
     # , extent=[0, len(beliefs), 0, 1]
     ax.imshow(img, interpolation='nearest', origin='lower', aspect='auto', extent=[0, num_steps, bins[0], bins[-1]])
-    ax.plot([0, num_steps], [user_f]*2, 'r--', label=f'user f ({user_f})')
+    if len(np.array(user_f)) > 1:
+        ax.plot(user_f, 'r--', label=f'user f')
+    else:
+        ax.plot([0, num_steps], [user_f]*2, 'r--', label=f'user f ({user_f})')
     ax.set_xlabel('interface step')
     ax.set_ylabel('possible error rate')
-    ax.set_title('Marginal belief over flip probabilities Q( f ).')
+    ax.set_title('Marginal Q( f ).')
     ax.legend()
